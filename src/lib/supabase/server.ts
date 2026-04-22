@@ -12,12 +12,16 @@ export async function createClient() {
         getAll() {
           return cookieStore.getAll()
         },
+        // Menambahkan tipe data agar tidak error saat deploy di Vercel
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
             )
-          } catch {}
+          } catch {
+            // Catch diperlukan karena setAll bisa dipanggil dari Server Component
+            // di mana cookies tidak bisa diubah setelah response dikirim.
+          }
         },
       },
     }
