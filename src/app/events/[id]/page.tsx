@@ -24,7 +24,6 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
 
   if (!profile) redirect('/login')
 
-  // Fetch event (RLS handles authorization)
   const { data: event } = await supabase
     .from('events')
     .select('*')
@@ -33,14 +32,12 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
 
   if (!event) notFound()
 
-  // Fetch global balance
   const { data: globalBalance } = await supabase
     .from('global_balance')
     .select('*')
     .eq('id', 1)
     .single()
 
-  // Fetch transactions
   const { data: transactions } = await supabase
     .from('transactions')
     .select('*')
@@ -57,15 +54,12 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
       <Header profile={profile} globalBalance={globalBalance || { id: 1, total_balance: 0, updated_at: '' }} />
 
       <main style={{ flex: 1, padding: '24px', maxWidth: 1200, margin: '0 auto', width: '100%' }}>
-        {/* Breadcrumb */}
+        {/* Breadcrumb - Perbaikan: Menghapus onMouseEnter/onMouseLeave */}
         <div style={{
           display: 'flex', alignItems: 'center', gap: 8,
           marginBottom: 20, fontSize: 13,
         }}>
-          <Link href="/dashboard" style={{ color: 'var(--text-2)', textDecoration: 'none', transition: 'color 0.2s' }}
-            onMouseEnter={e => (e.target as HTMLElement).style.color = 'var(--accent)'}
-            onMouseLeave={e => (e.target as HTMLElement).style.color = 'var(--text-2)'}
-          >
+          <Link href="/dashboard" className="breadcrumb-link" style={{ color: 'var(--text-2)', textDecoration: 'none' }}>
             Dashboard
           </Link>
           <span style={{ color: 'var(--text-3)' }}>›</span>
@@ -134,7 +128,6 @@ export default async function EventDetailPage({ params }: EventDetailPageProps) 
           </div>
         </div>
 
-        {/* Client Part */}
         <EventDetailClient
           event={event}
           transactions={txList}
