@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link' // Tambahkan import Link
 
 export default function LoginPage() {
   const router = useRouter()
@@ -114,12 +115,33 @@ export default function LoginPage() {
             <button
               type="submit"
               className="btn btn-primary"
-              style={{ width: '100%', justifyContent: 'center', padding: '12px' }}
+              style={{ width: '100%', justifyContent: 'center', padding: '12px', marginBottom: 16 }}
               disabled={loading}
             >
               {loading ? 'Memproses...' : 'Masuk'}
             </button>
           </form>
+
+          {/* Tombol Daftar Baru */}
+          <div style={{ textAlign: 'center', borderTop: '1px solid var(--border)', paddingTop: 16 }}>
+            <p style={{ fontSize: 13, color: 'var(--text-2)', marginBottom: 8 }}>
+              Belum punya akun?
+            </p>
+            <Link 
+              href="/register" 
+              className="btn"
+              style={{ 
+                width: '100%', 
+                justifyContent: 'center', 
+                background: 'rgba(233,69,96,0.1)',
+                color: 'var(--accent)',
+                border: '1px solid var(--accent)',
+                padding: '10px'
+              }}
+            >
+              Daftar Sekarang
+            </Link>
+          </div>
         </div>
 
         <p style={{ textAlign: 'center', fontSize: 12, color: 'var(--text-3)', marginTop: 20 }}>
