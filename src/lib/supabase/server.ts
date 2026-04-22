@@ -1,4 +1,4 @@
-import { createServerClient } from '@supabase/ssr'
+import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
 export async function createClient() {
@@ -12,15 +12,14 @@ export async function createClient() {
         getAll() {
           return cookieStore.getAll()
         },
-        // Menambahkan tipe data agar tidak error saat deploy di Vercel
-        setAll(cookiesToSet) {
+        // Menambahkan tipe data eksplisit agar lolos pengecekan TypeScript di Vercel
+        setAll(cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
             )
           } catch {
-            // Catch diperlukan karena setAll bisa dipanggil dari Server Component
-            // di mana cookies tidak bisa diubah setelah response dikirim.
+            // Ini normal terjadi jika dipanggil dari Server Component
           }
         },
       },
